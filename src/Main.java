@@ -4,20 +4,19 @@ import java.util.Set;
 public class Main {
 
     public static void main(String[] args) {
-        User anna = new User(
-                "user-101",
-                "Анна",
-                "anna@university.edu",
-                null,
-                Set.of(EmailChannel.CHANNEL_ID, SmsChannel.CHANNEL_ID)
-        );
-        User boris = new User(
-                "user-102",
-                "Борис",
-                "boris@university.edu",
-                "+7-900-123-45-67",
-                Set.of(SmsChannel.CHANNEL_ID, PushChannel.CHANNEL_ID)
-        );
+        String annaId = "57923471";
+        String annaName = "Анна";
+        String annaEmail = "anna@university.edu";
+        String annaPhone = null;
+        Set<String> annaChannels = Set.of(EmailChannel.CHANNEL_ID, SmsChannel.CHANNEL_ID);
+        User anna = new User(annaId, annaName, annaEmail, annaPhone, annaChannels);
+
+        String borisId = "9573235";
+        String borisName = "Борис";
+        String borisEmail = "boris@university.edu";
+        String borisPhone = "+7-900-123-45-67";
+        Set<String> borisChannels = Set.of(SmsChannel.CHANNEL_ID, PushChannel.CHANNEL_ID);
+        User boris = new User(borisId, borisName, borisEmail, borisPhone, borisChannels);
 
         List<User> users = List.of(anna, boris);
 
@@ -28,20 +27,18 @@ public class Main {
         NotificationService notificationService = new NotificationService();
 
         System.out.println("=== Рассылка 1: Изменение аудитории (Email, SMS) ===");
-        Notification classroomNotification = new ClassroomChangeNotification(
-                "Изменение расписания",
-                "304"
-        );
-        List<NotificationChannel> firstWaveChannels = List.of(emailChannel, smsChannel);
+        String classroomTitle = "Изменение расписания";
+        String targetClassroom = "304";
+        Notification classroomNotification = new ClassroomChangeNotification(classroomTitle, targetClassroom);
+        List<NotificationChannel> firstWaveChannels = List.of(emailChannel, smsChannel, pushChannel);
         notificationService.broadcast(users, classroomNotification, firstWaveChannels);
 
         System.out.println();
         System.out.println("=== Рассылка 2: Напоминание о дедлайне (Email, SMS, Push) ===");
-        Notification deadlineNotification = new DeadlineReminderNotification(
-                "Учебный дедлайн",
-                "Лабораторная работа № 5",
-                "13 ноября"
-        );
+        String deadlineTitle = "Учебный дедлайн";
+        String assignmentTitle = "Лабораторная работа № 5";
+        String dueDate = "13 ноября";
+        Notification deadlineNotification = new DeadlineReminderNotification(deadlineTitle, assignmentTitle, dueDate);
         List<NotificationChannel> secondWaveChannels = List.of(emailChannel, smsChannel, pushChannel);
         notificationService.broadcast(users, deadlineNotification, secondWaveChannels);
     }
